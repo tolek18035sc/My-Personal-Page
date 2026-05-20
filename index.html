@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tolek | Home</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Mansalva&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="assets/stylesheets/styles.css">
+</head>
+<body>
+
+    <header>
+        <h1 class="title">Tolek's Page</h1>
+    </header>
+
+    <main class="container">
+        
+        <div class="main-content">
+            <section class="card">
+                <h2>Development</h2>
+                <p>Welcome to my dev space! Down here, there's a "View Projects" button which you can use to view all my past & current projects! I recommend checking it out!</p>
+                <a href="/projects" class="btn-projects">View Projects</a>
+            </section>
+
+            <section class="card movies-section">
+                <h2>Favorite Movie</h2>
+                <div class="movies-banners-list">
+                    
+                    <div class="gallery-item movie-banner-style">
+                        <img style="cursor: default;" src="/assets/images/hailmary.jpg">
+                        <div class="gallery-overlay">
+                            <span>Hail Mary</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+        </div>
+
+        <aside class="sidebar">
+            <section class="card">
+                <h2>Backstory</h2>
+                <p>Hey there! I'm a developer from the Netherlands, and I develop many things. Here is some of what I work on:</p>
+                <div class="skills-wrapper">
+                    <ul class="skills-list">
+                        <li>Websites</li>
+                        <li>Discord Bots</li>
+                        <li>Small games</li>
+                        <li>And more...</li>
+                    </ul>
+                </div>         
+            </section>
+
+            <section class="card games-section">
+                <h2>Favorite Games</h2>
+                <div class="games-grid">
+                    <div class="game-item">
+                        <img src="/assets/images/ultrakill.ico" alt="Ultrakill">
+                        <a href="https://store.steampowered.com/app/1229490/ULTRAKILL/" class="game-link">Ultrakill</a>
+                    </div>
+                    <div class="game-item">
+                        <img src="/assets/images/undertale.png" alt="Undertale">
+                        <a href="https://store.steampowered.com/app/391540/Undertale/" class="game-link">Undertale</a>
+                    </div>
+                </div>
+            </section>
+        </aside>
+
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="center">
+                Made by <a href="https://sophies-portfolio.carrd.co/" target="_blank">Tolek</a>
+            </div>
+            <div class="right">
+                <span class="material-symbols--mail-outline"></span>
+                <a class="a-contact" href="mailto:tolekp1803@gmail.com">Tolekp1803@gmail.com</a>
+            </div>
+        </div>
+    </footer>
+<audio id="bg-music" loop>
+    <source src="/assets/music/peak.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const music = document.getElementById("bg-music");
+    music.volume = 0.5;
+
+    const savedTime = localStorage.getItem("music_timestamp");
+    if (savedTime) {
+        music.currentTime = parseFloat(savedTime);
+    }
+
+    setInterval(() => {
+        if (!music.paused) {
+            localStorage.setItem("music_timestamp", music.currentTime);
+        }
+    }, 1000);
+
+    music.play().catch(() => {
+        const startAudioOnInteraction = () => {
+            music.play();
+            document.removeEventListener("click", startAudioOnInteraction);
+            document.removeEventListener("keydown", startAudioOnInteraction);
+        };
+
+        document.addEventListener("click", startAudioOnInteraction);
+        document.addEventListener("keydown", startAudioOnInteraction);
+    });
+
+    window.addEventListener("beforeunload", () => {
+        localStorage.setItem("music_timestamp", music.currentTime);
+    });
+});
+</script>
+
+</body>
+</html>

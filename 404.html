@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tolek | 404</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Mansalva&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="assets/stylesheets/styles.css">
+</head>
+<body>
+
+    <header>
+    </header>
+
+    <main class="container" style="justify-content: center; display: flex;">
+        
+        <div class="main-content" style="flex: 1; max-width: 600px;">
+            <section class="card" style="text-align: center;">
+                <h1 style="font-family: 'Titan One', sans-serif; font-size: 3rem; color: #38bdf8; margin: 0; line-height: 1; text-shadow: -2px -2px 0 #1e3a8a, 2px -2px 0 #1e3a8a, -2px 2px 0 #1e3a8a, 2px 2px 0 #1e3a8a;">404</h1>
+                <br>
+                <p>Whoops! Looks like this page doesn't exist, click the button below to return back to the Home Page!</p>
+                <a href="/" class="btn-back" style="position: relative; top: auto; left: auto; display: inline-block; margin-top: 15px;">Go Home</a>
+            </section>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="center">
+                Made by <a href="https://sophies-portfolio.carrd.co/" target="_blank">Tolek</a>
+            </div>
+            <div class="right">
+                <span class="material-symbols--mail-outline"></span>
+                <a class="a-contact" href="mailto:tolekp1803@gmail.com">Tolekp1803@gmail.com</a>
+            </div>
+        </div>
+    </footer>
+
+<audio id="bg-music" loop>
+    <source src="/assets/music/peak.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const music = document.getElementById("bg-music");
+    music.volume = 0.3;
+
+    const savedTime = localStorage.getItem("music_timestamp");
+    if (savedTime) {
+        music.currentTime = parseFloat(savedTime);
+    }
+
+    setInterval(() => {
+        if (!music.paused) {
+            localStorage.setItem("music_timestamp", music.currentTime);
+        }
+    }, 1000);
+
+    music.play().catch(() => {
+        const startAudioOnInteraction = () => {
+            music.play();
+            document.removeEventListener("click", startAudioOnInteraction);
+            document.removeEventListener("keydown", startAudioOnInteraction);
+        };
+
+        document.addEventListener("click", startAudioOnInteraction);
+        document.addEventListener("keydown", startAudioOnInteraction);
+    });
+
+    window.addEventListener("beforeunload", () => {
+        localStorage.setItem("music_timestamp", music.currentTime);
+    });
+});
+</script>
+
+</body>
+</html>

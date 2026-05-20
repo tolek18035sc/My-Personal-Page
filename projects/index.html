@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tolek | Projects</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titan+One&family=Mansalva&family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/stylesheets/styles.css">
+</head>
+<body>
+
+    <header>
+        <a href="/" class="btn-back">← Back to Home</a>
+        <h1 class="title">My Projects</h1>
+    </header>
+
+    <main class="projects-container">
+        <article class="project-card">
+            <div class="project-banner">
+                <img src="/assets/projects/nimbus/banner.jpg" alt="Project Banner">
+            </div>
+            <div class="project-body">
+                <div class="project-header">
+                    <h2>Nimbus</h2>
+                    <span class="project-date">April 2026</span>
+                </div>
+                <div class="project-meta">
+                    <span class="tag">Discord Node.js</span>
+                    <span class="closed-project-link">Close Sourced</span>
+                    <a href="https://discord.com/oauth2/authorize?client_id=1325361087419256906&permissions=8&integration_type=0&scope=bot" class="project-link">Invite Bot</a>
+                </div>
+<div class="project-info">
+    <p class="p-intro">This bot focusses on an important element every server struggles these days: Security, and members getting hacked & sending scam images.</p>
+    
+    <p class="p-highlight">The primary function of this bot is to detect scams & keep communities safe. You can read more by clicking on the "OCR" image here below.</p>
+    
+    <p class="p-details">I've mostly worked with a team for a project, with mostly working on the back-end (database integration & the whole OCR stuff)</p>
+    
+    <p>This bot is still WIP, so expect changes on this card.</p>
+    
+    <p><i>Documentation is still W.I.P</i></p>
+</div>
+
+                <div class="project-gallery">
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="/assets/projects/nimbus/scamdetection.png" alt="OCR Anti-Scam" data-summary="OCR Anti-Scam" data-desc="It does this by processing images through OCR <i class='smallsub'>(Optical Character Recognition)</i> and see if the detected text is familiar in the database. If it is, then it will simply send an alert to the moderation team & mute/kick the user based off the user's preference.">
+                        <div class="gallery-overlay">
+                            <span>OCR Anti-Scam</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="/assets/projects/nimbus/modlogs.png" alt="Moderator Logs" data-summary="Moderator logs" data-desc="This is a simple command showing the moderator's stats. You can use this to keep track of your moderator's activity, or just see 'em for fun!">
+                        <div class="gallery-overlay">
+                            <span>Moderator Mod-Logs</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="/assets/projects/nimbus/modlog.png" alt="Modlogs" data-summary="Moderation Logs" data-desc="The bot has the ability to ban, kick and mute people as seen in the previous image. This module just ensures that it gets logged to a channel, and then sends all the data to the database, making sure that its secure and wont be wiped.">
+                        <div class="gallery-overlay">
+                            <span>Moderation Logs</span>
+                        </div>
+                    </div>
+                    <div class="gallery-item" onclick="openModal(this)">
+                        <img src="/assets/projects/nimbus/permissionlist.png" alt="Permissionlist" data-summary="Permission Function" data-desc="The permission function basically gives you the power as owner to customize the permissions fully. Every command has it's own permission value, so if you want to add banning to moderators for Nimbus, or remove it, then its possible with a single command!">
+                        <div class="gallery-overlay">
+                            <span>Permission Function</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer>
+        <div class="footer-container">
+            <div class="center">
+                Made by <a href="https://sophies-portfolio.carrd.co/" target="_blank">Tolek</a>
+            </div>
+            <div class="right">
+                <span class="material-symbols--mail-outline"></span>
+                <a class="a-contact" href="mailto:tolekp1803@gmail.com">Tolekp1803@gmail.com</a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="modal-close">&times;</span>
+        <div class="modal-content-wrapper" onclick="event.stopPropagation()">
+            <img class="modal-img" id="modalTargetImg" src="" alt="">
+            <div id="modalTitle" class="modal-title"></div>
+            <div id="modalDescription" class="modal-description"></div>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="/assets/music/peak.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function openModal(element) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalTargetImg');
+            const titleText = document.getElementById('modalTitle');
+            const descText = document.getElementById('modalDescription');
+            const targetImg = element.querySelector('img');
+
+            modalImg.src = targetImg.src;
+            modalImg.alt = targetImg.alt;
+            titleText.innerText = targetImg.getAttribute('data-summary');
+            descText.innerHTML = targetImg.getAttribute('data-desc');
+
+            modal.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const music = document.getElementById('bg-music');
+            music.volume = 0.5;
+
+            const savedTime = localStorage.getItem('music_timestamp');
+            if (savedTime) {
+                music.currentTime = parseFloat(savedTime);
+            }
+
+            setInterval(() => {
+                if (!music.paused) {
+                    localStorage.setItem('music_timestamp', music.currentTime);
+                }
+            }, 1000);
+
+            music.play().catch(() => {
+                const startAudioOnInteraction = () => {
+                    music.play();
+                    document.removeEventListener('click', startAudioOnInteraction);
+                    document.removeEventListener('keydown', startAudioOnInteraction);
+                };
+
+                document.addEventListener('click', startAudioOnInteraction);
+                document.addEventListener('keydown', startAudioOnInteraction);
+            });
+
+            window.addEventListener('beforeunload', () => {
+                localStorage.setItem('music_timestamp', music.currentTime);
+            });
+        });
+    </script>
+
+</body>
+</html>
