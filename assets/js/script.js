@@ -415,3 +415,89 @@ document.addEventListener('DOMContentLoaded', () => {
         termInput.focus();
     });
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = document.getElementById('sidebar-canvas');
+    const clearBtn = document.getElementById('canvas-clear');
+    const weightSlider = document.getElementById('canvas-weight');
+    const colorPickers = document.querySelectorAll('.color-picker');
+
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    let isDrawing = false;
+    let strokeColor = '#40a02b'; 
+    let pixelSize = 4; 
+
+    function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = 200; 
+        
+        ctx.imageSmoothingEnabled = false;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches && e.touches.length > 0 ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches && e.touches.length > 0 ? e.touches[0].clientY : e.clientY;
+        
+        const rawX = clientX - rect.left;
+        const rawY = clientY - rect.top;
+        
+        return {
+            x: Math.floor(rawX / pixelSize) * pixelSize,
+            y: Math.floor(rawY / pixelSize) * pixelSize
+        };
+    }
+
+    function colorPixel(pos) {
+        ctx.fillStyle = strokeColor;
+        ctx.fillRect(pos.x, pos.y, pixelSize, pixelSize);
+    }
+
+    function startDrawing(e) {
+        isDrawing = true;
+        const pos = getMousePos(e);
+        colorPixel(pos);
+    }
+
+    function draw(e) {
+        if (!isDrawing) return;
+        e.preventDefault(); 
+
+        const pos = getMousePos(e);
+        colorPixel(pos);
+    }
+
+    function stopDrawing() {
+        isDrawing = false;
+    }
+
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    window.addEventListener('mouseup', stopDrawing);
+
+    canvas.addEventListener('touchstart', startDrawing, { passive: false });
+    canvas.addEventListener('touchmove', draw, { passive: false });
+    window.addEventListener('touchend', stopDrawing);
+
+    clearBtn.addEventListener('click', () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    weightSlider.addEventListener('input', (e) => {
+        pixelSize = parseInt(e.target.value, 10);
+    });
+
+    colorPickers.forEach(picker => {
+        picker.addEventListener('click', () => {
+            colorPickers.forEach(p => p.style.borderColor = 'transparent');
+            picker.style.borderColor = '#4c4f69';
+            strokeColor = picker.getAttribute('data-color');
+        });
+    });
+});
