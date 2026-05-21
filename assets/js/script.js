@@ -1,30 +1,30 @@
-        function openModal(element) {
-            const modal = document.getElementById('imageModal');
-            const modalImg = document.getElementById('modalTargetImg');
-            const titleText = document.getElementById('modalTitle');
-            const descText = document.getElementById('modalDescription');
-            const targetImg = element.querySelector('img');
+function openModal(element) {
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalTargetImg');
+    const titleText = document.getElementById('modalTitle');
+    const descText = document.getElementById('modalDescription');
+    const targetImg = element.querySelector('img');
 
-            modalImg.src = targetImg.src;
-            modalImg.alt = targetImg.alt;
-            titleText.innerText = targetImg.getAttribute('data-summary');
-            descText.innerHTML = targetImg.getAttribute('data-desc');
+    modalImg.src = targetImg.src;
+    modalImg.alt = targetImg.alt;
+    titleText.innerText = targetImg.getAttribute('data-summary');
+    descText.innerHTML = targetImg.getAttribute('data-desc');
 
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
 
-        function closeModal() {
-            const modal = document.getElementById('imageModal');
-            modal.classList.remove('show');
-            document.body.style.overflow = '';
-        }
+function closeModal() {
+    const modal = document.getElementById('imageModal');
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+}
 
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-        });
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeModal();
+    }
+});
 
 document.addEventListener("DOMContentLoaded", () => {
     const music = document.getElementById("bg-music");
@@ -227,4 +227,191 @@ document.addEventListener("DOMContentLoaded", () => {
             window.addEventListener("load", forcePlayAudio);
         }
     }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const termInput = document.getElementById('term-input');
+    const termOutput = document.getElementById('term-output');
+
+    if (!termInput || !termOutput) return;
+
+    let currentDir = 'home';
+    let gameActive = false;
+    let targetNumber = 0;
+    let guessAttempts = 0;
+
+    const filesystem = {
+        'home': {
+            'dirs': ['games', 'secret_files'],
+            'files': ['about_me.txt']
+        },
+        'games': {
+            'dirs': [],
+            'files': ['ultrakill.cfg', 'undertale.sav']
+        },
+        'secret_files': {
+            'dirs': [],
+            'files': ['passwords.hash']
+        }
+    };
+
+    const commands = {
+        'help': () => [
+            'Available commands:',
+            '  <span class="term-highlight">ls</span>         - List files and folders',
+            '  <span class="term-highlight">cd &lt;dir&gt;</span>   - Change directory (e.g., cd games, cd ..)',
+            '  <span class="term-highlight">cat &lt;file&gt;</span> - Read a file text content',
+            '  <span class="term-highlight">guess</span>      - Play a number guessing game',
+            '  <span class="term-highlight">clear</span>      - Clear terminal window logs',
+            '  <span class="term-highlight">ultrakill</span>  - Execute system protocol 1229490',
+            '  <span class="term-highlight">undertale</span>  - Check soul status parameters'
+        ].join('<br>'),
+
+        'ls': () => {
+            const dirData = filesystem[currentDir];
+            const styledDirs = dirData.dirs.map(d => `<span class="term-highlight">${d}/</span>`);
+            const allItems = [...styledDirs, ...dirData.files];
+            return allItems.length > 0 ? allItems.join('   ') : 'Directory is empty.';
+        },
+
+        'cat': (filename) => {
+            if (!filename) return '<span class="term-error">Usage: cat &lt;filename&gt;</span>';
+            
+            const fileContentMap = {
+                'about_me.txt': 'Hey there! I am a developer from the Netherlands building dynamic web spaces, Discord bots, and small interactive games.',
+                'ultrakill.cfg': 'bind m1 +attack<br>bind space +jump<br>screen_shake=false<br>blood_splatter=max',
+                'undertale.sav': 'LV: 01<br>GOLD: 9999<br>SAVEPOINT: The Judgment Hall',
+                'passwords.hash': '$2b$12$eImiTXuWVxfM37uY4JANjOqZzH1F1sD2bU01B.fXmR8Y4bCgGzG7q [ENCRYPTED UNTIL ROOT ACCESS]'
+            };
+
+            if (filesystem[currentDir].files.includes(filename)) {
+                return fileContentMap[filename] || 'Empty file.';
+            }
+            return `<span class="term-error">cat: ${filename}: No such file found in this directory.</span>`;
+        },
+
+        'guess': () => {
+            gameActive = true;
+            targetNumber = Math.floor(Math.random() * 100) + 1;
+            guessAttempts = 0;
+            return '<span class="term-highlight">Guessing Game Activated!</span><br>I chose a number between 1 and 100. Type your guess directly into the prompt (e.g. 50).';
+        },
+
+        'clear': () => {
+            termOutput.innerHTML = '';
+            return '';
+        },
+
+        'ultrakill': () => 'MANKIND IS DEAD. BLOOD IS FUEL. HELL IS FULL.',
+        'undertale': () => '❤ Stay determined.'
+    };
+
+    termInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            if (gameActive) return;
+            
+            const currentInputValue = termInput.value.trim();
+            if (!currentInputValue) return;
+
+            const inputParts = currentInputValue.split(/\s+/);
+            const primaryToken = inputParts[0].toLowerCase();
+            const targetedArg = inputParts[1] || '';
+
+            const availableCommandsList = Object.keys(commands).concat(['cd']);
+
+            if (inputParts.length === 1) {
+                const commandMatches = availableCommandsList.filter(c => c.startsWith(primaryToken));
+                if (commandMatches.length === 1) {
+                    termInput.value = commandMatches[0] + ' ';
+                } else if (commandMatches.length > 1) {
+                    termOutput.innerHTML += `<div>${commandMatches.join('    ')}</div>`;
+                    termOutput.scrollTop = termOutput.scrollHeight;
+                }
+            } else if (inputParts.length === 2 && (primaryToken === 'cd' || primaryToken === 'cat')) {
+                const currentDirectoryStructure = filesystem[currentDir];
+                let structuralSuggestions = [];
+
+                if (primaryToken === 'cd') {
+                    structuralSuggestions = currentDirectoryStructure.dirs;
+                } else if (primaryToken === 'cat') {
+                    structuralSuggestions = currentDirectoryStructure.files;
+                }
+
+                const argumentMatches = structuralSuggestions.filter(item => item.startsWith(targetedArg));
+                if (argumentMatches.length === 1) {
+                    termInput.value = `${primaryToken} ${argumentMatches[0]}`;
+                } else if (argumentMatches.length > 1) {
+                    termOutput.innerHTML += `<div>${argumentMatches.join('    ')}</div>`;
+                    termOutput.scrollTop = termOutput.scrollHeight;
+                }
+            }
+        }
+
+        if (e.key === 'Enter') {
+            const rawInput = termInput.value.trim();
+            termInput.value = '';
+
+            if (rawInput === '') return;
+
+            const promptSymbol = gameActive ? '?' : (currentDir === 'home' ? '~$' : `/${currentDir}$`);
+            termOutput.innerHTML += `<div><span style="color: #89b4fa">guest@tolek-page:${promptSymbol}</span> ${rawInput}</div>`;
+
+            if (gameActive) {
+                const guessInt = parseInt(rawInput, 10);
+                if (isNaN(guessInt)) {
+                    termOutput.innerHTML += '<div><span class="term-error">Error: Enter a valid number integer.</span></div>';
+                } else {
+                    guessAttempts++;
+                    if (guessInt === targetNumber) {
+                        termOutput.innerHTML += `<div><span class="term-highlight">YOU WIN!</span> Target cracked: ${targetNumber} in ${guessAttempts} attempts!</div>`;
+                        gameActive = false;
+                    } else if (guessInt < targetNumber) {
+                        termOutput.innerHTML += '<div>Higher! Value target parameter matches are <span class="term-highlight">HIGHER</span>.</div>';
+                    } else {
+                        termOutput.innerHTML += '<div>Lower! Value target parameter matches are <span class="term-highlight">LOWER</span>.</div>';
+                    }
+                }
+                termOutput.scrollTop = termOutput.scrollHeight;
+                return;
+            }
+
+            const parts = rawInput.split(/\s+/);
+            const cmd = parts[0].toLowerCase();
+            const arg = parts[1];
+
+            let response = '';
+
+            if (cmd === 'cd') {
+                if (!arg || arg === '~' || (arg === '..' && currentDir !== 'home')) {
+                    currentDir = 'home';
+                    response = 'Moved back to home directory.';
+                } else if (filesystem[currentDir] && filesystem[currentDir].dirs.includes(arg)) {
+                    currentDir = arg;
+                    response = `Moved to /${arg}.`;
+                } else if (arg === '..') {
+                    currentDir = 'home';
+                    response = 'Moved back to home directory.';
+                } else {
+                    response = `<span class="term-error">cd: no such directory structure layout exists: ${arg}</span>`;
+                }
+            } else if (cmd === 'cat') {
+                response = commands.cat(arg);
+            } else if (commands[cmd]) {
+                response = commands[cmd]();
+            } else {
+                response = `<span class="term-error">Command not found: ${cmd}. Type "help" for items list.</span>`;
+            }
+
+            if (response) {
+                termOutput.innerHTML += `<div>${response}</div>`;
+            }
+
+            termOutput.scrollTop = termOutput.scrollHeight;
+        }
+    });
+
+    document.querySelector('.terminal-body').addEventListener('click', () => {
+        termInput.focus();
+    });
 });
