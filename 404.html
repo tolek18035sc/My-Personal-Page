@@ -15,7 +15,51 @@
 
     <header>
     </header>
+    <div class="top-right-player-trigger">
+        <section class="spotify-row mini-player">
+            <div class="row-left">
+                <div class="row-artwork">
+                    <img src="./assets/images/ultrakill.ico" alt="Track Cover" id="track-art" onerror="this.src='./assets/images/empty.png'">
+                </div>
+                <div class="row-meta">
+                    <h3 class="row-title">The Fire Is Gone</h3>
+                    <p class="row-artist">Keygen Church</p>
+                </div>
+            </div>
 
+            <div class="row-controls">
+                <button class="row-btn" id="action-prev" aria-label="Previous Track">
+                    <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+                </button>
+                
+                <button class="row-btn row-btn-main" id="action-play" aria-label="Play / Pause">
+                    <svg class="icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    <svg class="icon-pause" viewBox="0 0 24 24" style="display:none;"><path d="M6 19h4V5H6zm8-14v14h4V5z"/></svg>
+                </button>
+                
+                <button class="row-btn" id="action-next" aria-label="Next Track">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 12L7 6v12zm4.5-6h2v12h-2z"/></svg>
+                </button>
+            </div>
+
+            <div class="player-expanded-drawer">
+                <div class="timeline-container">
+                    <span class="time-text" id="time-current">0:00</span>
+                    <input type="range" class="player-slider timeline-slider" id="track-timeline" min="0" value="0" step="0.1">
+                    <span class="time-text" id="time-remaining">-0:00</span>
+                </div>
+                <div class="volume-container">
+                    <svg class="volume-icon" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    <input type="range" class="player-slider volume-slider" id="volume-control" min="0" max="1" step="0.01" value="0.4">
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <audio id="bg-music" loop>
+        <source src="./assets/music/peak.mp3" type="audio/mpeg">
+    </audio>
+            
     <main class="container" style="justify-content: center; display: flex;">
         
         <div class="main-content" style="flex: 1; max-width: 600px;">
@@ -23,7 +67,7 @@
                 <h1 style="font-family: 'Titan One', sans-serif; font-size: 3rem; color: #38bdf8; margin: 0; line-height: 1; text-shadow: -2px -2px 0 #1e3a8a, 2px -2px 0 #1e3a8a, -2px 2px 0 #1e3a8a, 2px 2px 0 #1e3a8a;">404</h1>
                 <br>
                 <p>Whoops! Looks like this page doesn't exist, click the button below to return back to the Home Page!</p>
-                <a href="/" class="btn-back" style="position: relative; top: auto; left: auto; display: inline-block; margin-top: 15px;">Go Home</a>
+                <a href="./index.html" class="btn-back" style="position: relative; top: auto; left: auto; display: inline-block; margin-top: 15px;">Go Home</a>
             </section>
         </div>
 
@@ -41,42 +85,7 @@
         </div>
     </footer>
 
-<audio id="bg-music" loop>
-    <source src="./assets/music/peak.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-    const music = document.getElementById("bg-music");
-    music.volume = 0.3;
-
-    const savedTime = localStorage.getItem("music_timestamp");
-    if (savedTime) {
-        music.currentTime = parseFloat(savedTime);
-    }
-
-    setInterval(() => {
-        if (!music.paused) {
-            localStorage.setItem("music_timestamp", music.currentTime);
-        }
-    }, 1000);
-
-    music.play().catch(() => {
-        const startAudioOnInteraction = () => {
-            music.play();
-            document.removeEventListener("click", startAudioOnInteraction);
-            document.removeEventListener("keydown", startAudioOnInteraction);
-        };
-
-        document.addEventListener("click", startAudioOnInteraction);
-        document.addEventListener("keydown", startAudioOnInteraction);
-    });
-
-    window.addEventListener("beforeunload", () => {
-        localStorage.setItem("music_timestamp", music.currentTime);
-    });
-});
-</script>
+<script src="./assets/js/script.js"></script>
 
 </body>
 </html>
