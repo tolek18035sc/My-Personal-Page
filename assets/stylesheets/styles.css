@@ -1147,3 +1147,45 @@ a {
     cursor: pointer;
     margin: 0;
 }
+
+.favorites-box-grid {
+    max-width: 1100px;
+    width: 90%;
+    margin: 0 auto 40px auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.fav-small-box {
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px;
+}
+
+.fav-small-box h2 {
+    font-size: 1.5rem;
+    margin-bottom: 8px;
+}
+
+.fav-item-name {
+    font-family: "Quicksand", sans-serif;
+    font-size: 1.3rem !important;
+    font-weight: 700 !important;
+    color: #1e3a8a !important;
+    margin-bottom: 12px !important;
+}
+
+.fav-small-box .tag {
+    font-family: "Quicksand", sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #0369a1;
+    background-color: #e0f2fe;
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1.5px solid #007ec2;
+    margin-top: auto;
+}
